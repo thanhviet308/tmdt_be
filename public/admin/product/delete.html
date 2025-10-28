@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Shop" />
+    <meta name="author" content="Shop" />
+    <title>Delete Product - Shop</title>
+    <link href="/assets/css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="sb-nav-fixed">
+    <div id="header"></div>
+    <div id="layoutSidenav">
+        <div id="sidebar"></div>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">Products</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item"><a href="/admin/dashboard/show.html">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="/admin/product/show.html">Product</a></li>
+                        <li class="breadcrumb-item active">Delete</li>
+                    </ol>
+                    <div class="mt-5">
+                        <div class="row">
+                            <div class="col-12 mx-auto">
+                                <div class="d-flex justify-content-between">
+                                    <h3>Delete the product</h3>
+                                </div>
+                                <hr />
+                                <div id="message"></div>
+                                <div class="alert alert-danger">Are you sure you want to delete this product?</div>
+
+                                <div>
+                                    <button id="confirmBtn" class="btn btn-danger" type="button">Confirm Delete</button>
+                                    <a class="btn btn-secondary" href="/admin/product/show.html">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <div id="footer"></div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+    <script src="/assets/js/scripts.js"></script>
+    <script src="/assets/js/admin-layout.js"></script>
+    <script src="/assets/js/product.js"></script>
+</body>
+
+</html>
