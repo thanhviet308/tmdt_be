@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="Shop" />
-    <meta name="author" content="Shop" />
-    <title>Update Order - Shop</title>
+    <meta name="description" content="Y Tế Mart" />
+    <meta name="author" content="Y Tế Mart" />
+    <title>Cập nhật Đơn hàng - Y Tế Mart</title>
     <link href="/assets/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
@@ -19,36 +19,36 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Orders</h1>
+                    <h1 class="mt-4">Đơn hàng</h1>
                     <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item"><a href="/admin/dashboard/show.html">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="/admin/order/show.html">Order</a></li>
-                        <li class="breadcrumb-item active">Update</li>
+                        <li class="breadcrumb-item"><a href="/admin/dashboard/show.html">Trang chủ</a></li>
+                        <li class="breadcrumb-item"><a href="/admin/order/show.html">Đơn hàng</a></li>
+                        <li class="breadcrumb-item active">Cập nhật</li>
                     </ol>
 
                     <div class=" mt-5">
                         <div class="row">
                             <div class="col-md-6 col-12 mx-auto">
-                                <h3>Update an order</h3>
+                                <h3>Cập nhật đơn hàng</h3>
                                 <hr />
                                 <div id="message"></div>
                                 <form id="statusForm" class="row">
                                     <div class="mb-3">
-                                        <label class="form-label">Order:</label>
+                                        <label class="form-label">Đơn hàng:</label>
                                         <div id="orderInfo" class="form-control-plaintext">Loading...</div>
                                     </div>
                                     <div class="mb-3 col-12 col-md-6">
-                                        <label class="form-label">Status:</label>
+                                        <label class="form-label">Trạng thái:</label>
                                         <select id="status" class="form-select">
-                                            <option value="PENDING">PENDING</option>
-                                            <option value="SHIPPING">SHIPPING</option>
-                                            <option value="COMPLETE">COMPLETE</option>
-                                            <option value="CANCEL">CANCEL</option>
+                                            <option value="PENDING">Chờ xử lý</option>
+                                            <option value="SHIPPING">Đang giao</option>
+                                            <option value="COMPLETE">Hoàn tất</option>
+                                            <option value="CANCEL">Đã hủy</option>
                                         </select>
                                     </div>
                                     <div class="col-12 mb-5">
-                                        <button id="submitBtn" type="submit" class="btn btn-warning">Update</button>
-                                        <a href="/admin/order/show.html" class="btn btn-secondary ms-2">Cancel</a>
+                                        <button id="submitBtn" type="submit" class="btn btn-warning">Cập nhật</button>
+                                        <a href="/admin/order/show.html" class="btn btn-secondary ms-2">Hủy</a>
                                     </div>
                                 </form>
 

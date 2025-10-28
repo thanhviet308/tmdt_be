@@ -2,6 +2,17 @@
     const path = location.pathname;
     function getQueryParam(name) { const p = new URLSearchParams(location.search); return p.get(name); }
     function money(n) { try { return Number(n).toLocaleString('vi-VN'); } catch { return n; } }
+    function vnCategory(c) {
+        const key = String(c || '').toLowerCase();
+        switch (key) {
+            case 'medical-measurement': return 'Thiết bị đo y tế';
+            case 'respiratory-support': return 'Thiết bị hỗ trợ hô hấp';
+            case 'medical-supplies': return 'Vật tư y tế';
+            case 'health-care': return 'Chăm sóc sức khỏe';
+            case 'rehabilitation-devices': return 'Thiết bị phục hồi chức năng';
+            default: return c || '';
+        }
+    }
 
     // ========== /admin/product/show.html ==========
     function prodList_getQueryParams() { const p = new URLSearchParams(location.search); return { page: parseInt(p.get('page') || '1') }; }
@@ -15,25 +26,25 @@
         const tbody = document.getElementById('productTableBody');
         const pager = document.getElementById('pagination');
         if (!res.ok || !json.success) {
-            if (tbody) tbody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">${json.message || 'Failed to load'}</td></tr>`;
+            if (tbody) tbody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">${json.message || 'Tải dữ liệu thất bại'}</td></tr>`;
             if (pager) pager.innerHTML = '';
             return;
         }
         const data = json.data || {}; const products = data.products || []; const pg = data.pagination || { currentPage: 1, totalPages: 1 };
         if (tbody) {
             if (!products.length) {
-                tbody.innerHTML = '<tr><td colspan="5" class="text-center">No products found.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center">Không có sản phẩm.</td></tr>';
             } else {
                 tbody.innerHTML = products.map(p => `
           <tr>
             <td>${p.id}</td>
             <td>${p.name}</td>
             <td>${money(p.price)}</td>
-            <td>${p.category || ''}</td>
+                        <td>${vnCategory(p.category)}</td>
             <td>
-              <a class="btn btn-success btn-sm" href="/admin/product/detail.html?id=${p.id}">View</a>
-              <a class="btn btn-warning btn-sm mx-1" href="/admin/product/update.html?id=${p.id}">Update</a>
-              <a class="btn btn-danger btn-sm" href="/admin/product/delete.html?id=${p.id}">Delete</a>
+                            <a class="btn btn-success btn-sm" href="/admin/product/detail.html?id=${p.id}">Xem</a>
+                            <a class="btn btn-warning btn-sm mx-1" href="/admin/product/update.html?id=${p.id}">Cập nhật</a>
+                            <a class="btn btn-danger btn-sm" href="/admin/product/delete.html?id=${p.id}">Xóa</a>
             </td>
           </tr>`).join('');
             }
@@ -57,19 +68,19 @@
         const info = document.getElementById('prodInfo');
         const img = document.getElementById('prodImg');
         const title = document.getElementById('title');
-        if (!res.ok || !json.success) { if (info) info.innerHTML = `<li class="list-group-item text-danger">${json.message || 'Failed to load'}</li>`; return; }
-        const p = json.data; if (title) title.textContent = `Product detail (id = ${p.id})`;
+        if (!res.ok || !json.success) { if (info) info.innerHTML = `<li class="list-group-item text-danger">${json.message || 'Tải dữ liệu thất bại'}</li>`; return; }
+        const p = json.data; if (title) title.textContent = `Chi tiết sản phẩm (id = ${p.id})`;
         if (p.image && img) {
             const url = p.image.startsWith('/') ? p.image : '/' + p.image;
             img.src = url; img.style.display = 'block';
         }
         if (info) info.innerHTML = `
-      <li class="list-group-item"><strong>ID:</strong> ${p.id}</li>
-      <li class="list-group-item"><strong>Name:</strong> ${p.name || ''}</li>
-      <li class="list-group-item"><strong>Price:</strong> ${money(p.price)}</li>
-      <li class="list-group-item"><strong>Category:</strong> ${p.category || ''}</li>
-      <li class="list-group-item"><strong>Quantity:</strong> ${p.quantity ?? ''}</li>
-    `;
+            <li class="list-group-item"><strong>ID:</strong> ${p.id}</li>
+            <li class="list-group-item"><strong>Tên:</strong> ${p.name || ''}</li>
+            <li class="list-group-item"><strong>Giá:</strong> ${money(p.price)}</li>
+            <li class="list-group-item"><strong>Danh mục:</strong> ${vnCategory(p.category)}</li>
+            <li class="list-group-item"><strong>Số lượng:</strong> ${p.quantity ?? ''}</li>
+        `;
     }
 
     // ========== /admin/product/create.html ==========
@@ -135,7 +146,20 @@
         document.getElementById('detailDesc').value = p.description || '';
         document.getElementById('shortDesc').value = p.description || '';
         document.getElementById('quantity').value = p.quantity ?? 0;
-        const factory = document.getElementById('factory'); if (factory && p.category) factory.value = p.category;
+        const factory = document.getElementById('factory');
+        if (factory && p.category) {
+            const mapToCode = (c) => {
+                const v = String(c).toLowerCase();
+                if (v === 'thiết bị đo y tế') return 'medical-measurement';
+                if (v === 'thiết bị hỗ trợ hô hấp') return 'respiratory-support';
+                if (v === 'vật tư y tế') return 'medical-supplies';
+                if (v === 'chăm sóc sức khỏe') return 'health-care';
+                if (v === 'thiết bị phục hồi chức năng') return 'rehabilitation-devices';
+                return c;
+            };
+            const code = mapToCode(p.category);
+            factory.value = code;
+        }
         const pre = document.getElementById('avatarPreview'); if (p.image && pre) { const url = p.image.startsWith('/') ? p.image : '/' + p.image; pre.src = url; pre.style.display = 'block'; }
     }
     async function prodUpdate_submit() {
@@ -171,7 +195,7 @@
         const token = localStorage.getItem('token');
         const res = await fetch(`/api/admin/products/${id}`, { headers: { 'Authorization': `Bearer ${token}` } });
         const json = await res.json(); const p = document.getElementById('prodSummary');
-        if (!res.ok || !json.success) { if (p) p.textContent = json.message || 'Failed to load'; return; }
+        if (!res.ok || !json.success) { if (p) p.textContent = json.message || 'Tải dữ liệu thất bại'; return; }
         const d = json.data; if (p) p.textContent = `#${d.id} — ${d.name} — ${d.price}`;
     }
     async function prodDelete_do() {

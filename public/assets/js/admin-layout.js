@@ -49,7 +49,7 @@
         const welcomeSpan = document.getElementById('welcomeName');
         try {
             const user = JSON.parse(localStorage.getItem('user') || 'null');
-            if (user && welcomeSpan) welcomeSpan.textContent = user.fullName || user.email || 'User';
+            if (user && welcomeSpan) welcomeSpan.textContent = user.fullName || user.email || 'Tài khoản';
         } catch (_e) { }
 
         const logoutBtn = document.getElementById('logoutBtn');

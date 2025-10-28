@@ -2,6 +2,15 @@
     const path = location.pathname;
     function getQueryParam(name) { const p = new URLSearchParams(location.search); return p.get(name); }
     function toMoney(n) { try { return Number(n).toLocaleString('vi-VN') + ' đ'; } catch { return n + ' đ'; } }
+    function vnStatus(s) {
+        switch ((s || '').toUpperCase()) {
+            case 'PENDING': return 'Chờ xử lý';
+            case 'SHIPPING': return 'Đang giao';
+            case 'COMPLETE': return 'Hoàn tất';
+            case 'CANCEL': return 'Đã hủy';
+            default: return s || '';
+        }
+    }
 
     // ========== /admin/order/show.html ==========
     function orderList_getQueryParams() {
@@ -24,7 +33,7 @@
         const info = document.getElementById('listInfo');
         const pager = document.getElementById('pagination');
         if (!res.ok || !json.success) {
-            if (tbody) tbody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">${json.message || 'Failed to load'}</td></tr>`;
+            if (tbody) tbody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">${json.message || 'Tải dữ liệu thất bại'}</td></tr>`;
             if (pager) pager.innerHTML = '';
             if (info) info.textContent = '';
             return;
@@ -33,18 +42,18 @@
         const pg = data.pagination || { currentPage: 1, totalPages: 1, totalItems: 0, itemsPerPage: 10 };
         if (tbody) {
             if (!orders.length) {
-                tbody.innerHTML = '<tr><td colspan="5" class="text-center">No orders.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center">Không có đơn hàng.</td></tr>';
             } else {
                 tbody.innerHTML = orders.map(o => `
           <tr>
             <th>${o.id}</th>
             <td>${toMoney(o.totalPrice)}</td>
-            <td>${o.user?.fullName || o.user?.email || 'N/A'}</td>
-            <td><span class="badge bg-secondary">${o.status}</span></td>
+                        <td>${o.user?.fullName || o.user?.email || 'Không có'}</td>
+                        <td><span class="badge bg-secondary">${vnStatus(o.status)}</span></td>
             <td>
-              <a class="btn btn-success btn-sm" href="/admin/order/detail.html?id=${o.id}">View</a>
-              <a class="btn btn-warning btn-sm mx-1" href="/admin/order/update.html?id=${o.id}">Update</a>
-              <a class="btn btn-danger btn-sm" href="/admin/order/delete.html?id=${o.id}">Delete</a>
+                            <a class="btn btn-success btn-sm" href="/admin/order/detail.html?id=${o.id}">Xem</a>
+                            <a class="btn btn-warning btn-sm mx-1" href="/admin/order/update.html?id=${o.id}">Cập nhật</a>
+                            <a class="btn btn-danger btn-sm" href="/admin/order/delete.html?id=${o.id}">Xóa</a>
             </td>
           </tr>
         `).join('');
@@ -71,29 +80,30 @@
         const title = document.getElementById('title');
         const summary = document.getElementById('summary');
         if (!res.ok || !json.success) {
-            if (body) body.innerHTML = `<tr><td colspan="5" class="text-center text-danger">${json.message || 'Failed to load'}</td></tr>`;
+            if (body) body.innerHTML = `<tr><td colspan="5" class="text-center text-danger">${json.message || 'Tải dữ liệu thất bại'}</td></tr>`;
             return;
         }
         const order = json.data;
-        if (title) title.textContent = `Order detail (id = ${order.id})`;
+        if (title) title.textContent = `Chi tiết đơn hàng (id = ${order.id})`;
         if (summary) summary.innerHTML = `
       <div class="alert alert-info">
-        <div><strong>Status:</strong> ${order.status}</div>
-        <div><strong>User:</strong> ${order.user?.fullName || order.user?.email || 'N/A'}</div>
-        <div><strong>Total:</strong> ${toMoney(order.totalPrice)}</div>
+        <div><strong>Trạng thái:</strong> ${vnStatus(order.status)}</div>
+        <div><strong>Người đặt:</strong> ${order.user?.fullName || order.user?.email || 'Không có'}</div>
+                <div><strong>Tổng:</strong> ${toMoney(order.totalPrice)}</div>
       </div>`;
         const rows = (order.orderDetails || []).map(od => {
             const p = od.product || {};
             const line = (Number(od.price) || 0) * (Number(od.quantity) || 0);
+            const imgSrc = p.image ? (p.image.startsWith('/') ? p.image : '/' + p.image) : '';
             return `
         <tr>
           <th scope="row">
             <div class="d-flex align-items-center">
-              <img src="/images/product/${p.image || ''}" class="img-fluid me-3 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                            <img src="${imgSrc}" class="img-fluid me-3 rounded-circle" style="width: 80px; height: 80px;" alt="">
             </div>
           </th>
-          <td><p class="mb-0 mt-4">${p.name || 'N/A'}</p></td>
-          <td><p class="mb-0 mt-4">${toMoney(od.price)}</p></td>
+                    <td><p class="mb-0 mt-4">${p.name || 'Không có'}</p></td>
+                    <td><p class="mb-0 mt-4">${toMoney(od.price)}</p></td>
           <td>
             <div class="input-group quantity mt-4" style="width: 100px;">
               <input type="text" class="form-control form-control-sm text-center border-0" value="${od.quantity}" disabled>
@@ -114,9 +124,9 @@
         const res = await fetch(`/api/admin/orders/${id}`, { headers: { 'Authorization': `Bearer ${token}` } });
         const json = await res.json();
         const info = document.getElementById('orderInfo');
-        if (!res.ok || !json.success) { if (info) info.textContent = json.message || 'Failed to load'; return; }
+        if (!res.ok || !json.success) { if (info) info.textContent = json.message || 'Tải dữ liệu thất bại'; return; }
         const o = json.data;
-        if (info) info.innerHTML = `#${o.id} — ${o.user?.fullName || o.user?.email || 'N/A'} — Total: ${toMoney(o.totalPrice)} — Current: <b>${o.status}</b>`;
+        if (info) info.innerHTML = `#${o.id} — ${o.user?.fullName || o.user?.email || 'Không có'} — Tổng: ${toMoney(o.totalPrice)} — Hiện tại: <b>${vnStatus(o.status)}</b>`;
         const sel = document.getElementById('status'); if (sel) sel.value = o.status || 'PENDING';
     }
     async function orderUpdate_submit(e) {
@@ -170,7 +180,7 @@
             });
             orderList_load().catch(() => {
                 const tbody = document.getElementById('ordersTbody');
-                if (tbody) tbody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Failed to load.</td></tr>';
+                if (tbody) tbody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Tải dữ liệu thất bại.</td></tr>';
             });
         } else if (path.endsWith('/admin/order/detail.html')) {
             orderDetail_load().catch(() => { });
@@ -179,7 +189,7 @@
             document.getElementById('statusForm')?.addEventListener('submit', orderUpdate_submit);
         } else if (path.endsWith('/admin/order/delete.html')) {
             const id = getQueryParam('id');
-            if (id) { const title = document.getElementById('title'); if (title) title.textContent = `Delete order (id = ${id})`; }
+            if (id) { const title = document.getElementById('title'); if (title) title.textContent = `Xóa đơn hàng (id = ${id})`; }
             document.getElementById('confirmBtn')?.addEventListener('click', orderDelete_do);
         }
     });

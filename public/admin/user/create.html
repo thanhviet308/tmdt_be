@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="Shop" />
-    <meta name="author" content="Shop" />
-    <title>Create User - Shop</title>
+    <meta name="description" content="Y Tế Mart" />
+    <meta name="author" content="Y Tế Mart" />
+    <title>Tạo Người dùng - Y Tế Mart</title>
     <link href="/assets/css/styles.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -20,15 +20,15 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Manage Users</h1>
+                    <h1 class="mt-4">Người dùng</h1>
                     <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item"><a href="/admin/dashboard/show.html">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Users</li>
+                        <li class="breadcrumb-item"><a href="/admin/dashboard/show.html">Trang chủ</a></li>
+                        <li class="breadcrumb-item active">Người dùng</li>
                     </ol>
                     <div class="mt-5">
                         <div class="row">
                             <div class="col-md-6 col-12 mx-auto">
-                                <h3>Create a user</h3>
+                                <h3>Tạo người dùng</h3>
                                 <hr />
                                 <form class="row" id="createUserForm">
                                     <div class="mb-3 col-12 col-md-6">
@@ -36,30 +36,30 @@
                                         <input type="email" class="form-control" id="email" />
                                     </div>
                                     <div class="mb-3 col-12 col-md-6">
-                                        <label class="form-label">Password:</label>
+                                        <label class="form-label">Mật khẩu:</label>
                                         <input type="password" class="form-control" id="password" />
                                     </div>
                                     <div class="mb-3 col-12 col-md-6">
-                                        <label class="form-label">Phone number:</label>
+                                        <label class="form-label">Số điện thoại:</label>
                                         <input type="text" class="form-control" id="phone" />
                                     </div>
                                     <div class="mb-3 col-12 col-md-6">
-                                        <label class="form-label">Full Name:</label>
+                                        <label class="form-label">Họ và tên:</label>
                                         <input type="text" class="form-control" id="fullName" />
                                     </div>
                                     <div class="mb-3 col-12">
-                                        <label class="form-label">Address:</label>
+                                        <label class="form-label">Địa chỉ:</label>
                                         <input type="text" class="form-control" id="address" />
                                     </div>
                                     <div class="mb-3 col-12 col-md-6">
-                                        <label class="form-label">Role:</label>
+                                        <label class="form-label">Vai trò:</label>
                                         <select class="form-select" id="roleName">
-                                            <option>ADMIN</option>
-                                            <option selected>USER</option>
+                                            <option value="ADMIN">Quản trị viên</option>
+                                            <option value="USER" selected>Người dùng</option>
                                         </select>
                                     </div>
                                     <div class="mb-3 col-12 col-md-6">
-                                        <label for="avatarFile" class="form-label">Avatar:</label>
+                                        <label for="avatarFile" class="form-label">Ảnh đại diện:</label>
                                         <input class="form-control" type="file" id="avatarFile"
                                             accept=".png, .jpg, .jpeg" />
                                     </div>
@@ -68,7 +68,7 @@
                                             id="avatarPreview" />
                                     </div>
                                     <div class="col-12 mb-5">
-                                        <button type="button" id="submitBtn" class="btn btn-primary">Create</button>
+                                        <button type="button" id="submitBtn" class="btn btn-primary">Tạo mới</button>
                                     </div>
                                 </form>
 

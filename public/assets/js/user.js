@@ -35,7 +35,7 @@
         const pager = document.getElementById('pagination');
         const info = document.getElementById('listInfo');
         if (!res.ok || !json.success) {
-            if (tbody) tbody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">${json.message || 'Failed to load'}</td></tr>`;
+            if (tbody) tbody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">${json.message || 'Tải dữ liệu thất bại'}</td></tr>`;
             if (pager) pager.innerHTML = '';
             if (info) info.textContent = '';
             return;
@@ -46,18 +46,25 @@
 
         if (tbody) {
             if (!users.length) {
-                tbody.innerHTML = '<tr><td colspan="5" class="text-center">No users.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center">Không có người dùng.</td></tr>';
             } else {
+                const mapRole = (r) => {
+                    const n = (r && (r.name || r)) || '';
+                    const up = String(n).toUpperCase();
+                    if (up === 'ADMIN') return 'Quản trị viên';
+                    if (up === 'USER') return 'Người dùng';
+                    return n;
+                };
                 tbody.innerHTML = users.map(u => `
           <tr>
               <th>${u.id}</th>
               <td>${u.email}</td>
               <td>${u.fullName || ''}</td>
-              <td>${u.role?.name || ''}</td>
+              <td>${mapRole(u.role)}</td>
               <td>
-                  <a class="btn btn-success btn-sm" href="/admin/user/detail.html?id=${u.id}">View</a>
-                  <a class="btn btn-warning btn-sm mx-1" href="/admin/user/update.html?id=${u.id}">Update</a>
-                  <a class="btn btn-danger btn-sm" href="/admin/user/delete.html?id=${u.id}">Delete</a>
+                  <a class="btn btn-success btn-sm" href="/admin/user/detail.html?id=${u.id}">Xem</a>
+                  <a class="btn btn-warning btn-sm mx-1" href="/admin/user/update.html?id=${u.id}">Cập nhật</a>
+                  <a class="btn btn-danger btn-sm" href="/admin/user/delete.html?id=${u.id}">Xóa</a>
               </td>
           </tr>
         `).join('');
@@ -87,18 +94,19 @@
         const json = await res.json();
         const ul = document.getElementById('userInfo');
         if (!res.ok || !json.success) {
-            if (ul) ul.innerHTML = `<li class="list-group-item text-danger">${json.message || 'Failed to load'}</li>`;
+            if (ul) ul.innerHTML = `<li class="list-group-item text-danger">${json.message || 'Tải dữ liệu thất bại'}</li>`;
             return;
         }
         const u = json.data;
+        const roleVi = (() => { const n = (u.role && (u.role.name || u.role)) || ''; const up = String(n).toUpperCase(); if (up === 'ADMIN') return 'Quản trị viên'; if (up === 'USER') return 'Người dùng'; return n; })();
         if (ul) ul.innerHTML = `
-      <li class="list-group-item"><strong>ID:</strong> ${u.id}</li>
-      <li class="list-group-item"><strong>Email:</strong> ${u.email || ''}</li>
-      <li class="list-group-item"><strong>Full Name:</strong> ${u.fullName || ''}</li>
-      <li class="list-group-item"><strong>Phone:</strong> ${u.phone || ''}</li>
-      <li class="list-group-item"><strong>Address:</strong> ${u.address || ''}</li>
-      <li class="list-group-item"><strong>Role:</strong> ${u.role?.name || ''}</li>
-    `;
+            <li class="list-group-item"><strong>ID:</strong> ${u.id}</li>
+            <li class="list-group-item"><strong>Email:</strong> ${u.email || ''}</li>
+            <li class="list-group-item"><strong>Họ và tên:</strong> ${u.fullName || ''}</li>
+            <li class="list-group-item"><strong>Số điện thoại:</strong> ${u.phone || ''}</li>
+            <li class="list-group-item"><strong>Địa chỉ:</strong> ${u.address || ''}</li>
+            <li class="list-group-item"><strong>Vai trò:</strong> ${roleVi}</li>
+        `;
     }
 
     // ========== /admin/user/create.html ==========
@@ -238,7 +246,7 @@
             }
             userList_load().catch(() => {
                 const tbody = document.getElementById('usersTbody');
-                if (tbody) tbody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Failed to load.</td></tr>';
+                if (tbody) tbody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Tải dữ liệu thất bại.</td></tr>';
             });
         } else if (path.endsWith('/admin/user/detail.html')) {
             userDetail_load().catch(() => { });
@@ -258,7 +266,7 @@
             const id = getQueryParam('id');
             if (id) {
                 const title = document.getElementById('title');
-                if (title) title.textContent = `Delete user (id = ${id})`;
+                if (title) title.textContent = `Xóa người dùng (id = ${id})`;
             }
             document.getElementById('confirmBtn')?.addEventListener('click', userDelete_do);
         }
