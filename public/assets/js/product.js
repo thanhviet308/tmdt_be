@@ -59,7 +59,10 @@
         const title = document.getElementById('title');
         if (!res.ok || !json.success) { if (info) info.innerHTML = `<li class="list-group-item text-danger">${json.message || 'Failed to load'}</li>`; return; }
         const p = json.data; if (title) title.textContent = `Product detail (id = ${p.id})`;
-        if (p.image && img) { img.src = `/images/product/${p.image}`; img.style.display = 'block'; }
+        if (p.image && img) {
+            const url = p.image.startsWith('/') ? p.image : '/' + p.image;
+            img.src = url; img.style.display = 'block';
+        }
         if (info) info.innerHTML = `
       <li class="list-group-item"><strong>ID:</strong> ${p.id}</li>
       <li class="list-group-item"><strong>Name:</strong> ${p.name || ''}</li>
@@ -86,13 +89,21 @@
         const quantity = document.getElementById('quantity').value ? parseInt(document.getElementById('quantity').value) : 0;
         const detailDesc = document.getElementById('detailDesc').value.trim();
         const shortDesc = document.getElementById('shortDesc').value.trim();
+        const category = document.getElementById('factory')?.value || '';
         if (!name) { alert('Vui lòng nhập tên sản phẩm'); return; }
         if (!price || price <= 0) { alert('Giá sản phẩm phải > 0'); return; }
         const token = localStorage.getItem('token');
-        const payload = { name, price, quantity, description: detailDesc || shortDesc || null };
+        const fd = new FormData();
+        fd.append('name', name);
+        fd.append('price', String(price));
+        fd.append('quantity', String(quantity));
+        if (detailDesc || shortDesc) fd.append('description', detailDesc || shortDesc);
+        if (category) fd.append('category', category);
+        const file = document.getElementById('avatarFile')?.files?.[0];
+        if (file) fd.append('image', file);
         const btn = document.getElementById('submitBtn'); btn.disabled = true;
         try {
-            const res = await fetch('/api/admin/products', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify(payload) });
+            const res = await fetch('/api/admin/products', { method: 'POST', headers: { 'Authorization': `Bearer ${token}` }, body: fd });
             const json = await res.json();
             if (!res.ok || !json.success) throw new Error(json.message || 'Tạo sản phẩm thất bại');
             alert('Tạo sản phẩm thành công'); location.href = '/admin/product/show.html';
@@ -125,7 +136,7 @@
         document.getElementById('shortDesc').value = p.description || '';
         document.getElementById('quantity').value = p.quantity ?? 0;
         const factory = document.getElementById('factory'); if (factory && p.category) factory.value = p.category;
-        const pre = document.getElementById('avatarPreview'); if (p.image && pre) { pre.src = `/images/product/${p.image}`; pre.style.display = 'block'; }
+        const pre = document.getElementById('avatarPreview'); if (p.image && pre) { const url = p.image.startsWith('/') ? p.image : '/' + p.image; pre.src = url; pre.style.display = 'block'; }
     }
     async function prodUpdate_submit() {
         const id = document.getElementById('id').value;
@@ -136,11 +147,18 @@
         const category = document.getElementById('factory')?.value || null;
         if (!name) { alert('Vui lòng nhập tên sản phẩm'); return; }
         if (!price || price <= 0) { alert('Giá sản phẩm phải > 0'); return; }
-        const payload = { name, price, quantity, description: description || null, category };
+        const fd = new FormData();
+        fd.append('name', name);
+        fd.append('price', String(price));
+        fd.append('quantity', String(quantity));
+        if (description) fd.append('description', description);
+        if (category) fd.append('category', category);
+        const file = document.getElementById('avatarFile')?.files?.[0];
+        if (file) fd.append('image', file);
         const btn = document.getElementById('updateBtn'); btn.disabled = true;
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch(`/api/admin/products/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify(payload) });
+            const res = await fetch(`/api/admin/products/${id}`, { method: 'PUT', headers: { 'Authorization': `Bearer ${token}` }, body: fd });
             const json = await res.json(); if (!res.ok || !json.success) throw new Error(json.message || 'Cập nhật sản phẩm thất bại');
             alert('Cập nhật sản phẩm thành công'); location.href = '/admin/product/show.html';
         } catch (err) { alert(err.message || 'Có lỗi xảy ra'); } finally { btn.disabled = false; }

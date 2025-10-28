@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import { Op } from "sequelize";
-import { User, Role } from "../models/index.js";
+import UserRepository from "../repositories/UserRepository.js";
 
 function paging({ page = 1, limit = 10 }) {
     const p = Math.max(1, parseInt(page));
@@ -31,9 +31,9 @@ class UserService {
 
         const { limit: l, offset } = paging({ page, limit });
 
-        const { count, rows } = await User.findAndCountAll({
+        const { count, rows } = await UserRepository.findAndCountAll({
             where,
-            include: [{ model: Role, as: "role", attributes: ["id", "name"] }],
+            include: [{ model: UserRepository.Role, as: "role", attributes: ["id", "name"] }],
             attributes: { exclude: ["password"] },
             order: [[sortBy, String(sortOrder).toUpperCase() === "ASC" ? "ASC" : "DESC"]],
             limit: l,
@@ -60,11 +60,11 @@ class UserService {
         const roleId = await resolveRoleId({ roleId: data.roleId, roleName: data.roleName });
         if (!roleId) throw new Error("validation: role is required (roleId or roleName)");
 
-        const exists = await User.findOne({ where: { email } });
+        const exists = await UserRepository.findOne({ where: { email } });
         if (exists) throw new Error("exists: email already in use");
 
         const hash = await bcrypt.hash(String(password), 10);
-        const created = await User.create({ email, password: hash, fullName, phone, address, roleId });
+        const created = await UserRepository.create({ email, password: hash, fullName, phone, address, roleId });
         const plain = created.get({ plain: true });
         delete plain.password;
         return plain;
@@ -73,14 +73,14 @@ class UserService {
     static async getUserById(id) {
         const userId = parseInt(id);
         if (Number.isNaN(userId)) return null;
-        return User.findByPk(userId, {
-            include: [{ model: Role, as: "role", attributes: ["id", "name"] }],
+        return UserRepository.findByPk(userId, {
+            include: [{ model: UserRepository.Role, as: "role", attributes: ["id", "name"] }],
             attributes: { exclude: ["password"] },
         });
     }
 
     static async updateUser(id, updates) {
-        const user = await User.findByPk(parseInt(id));
+        const user = await UserRepository.findByPk(parseInt(id));
         if (!user) return null;
 
         const data = {};
@@ -97,18 +97,18 @@ class UserService {
             data.roleId = await resolveRoleId({ roleId: updates.roleId, roleName: updates.roleName });
         }
 
-        await user.update(data);
-        const fresh = await User.findByPk(user.id, {
-            include: [{ model: Role, as: "role", attributes: ["id", "name"] }],
+        await UserRepository.updateInstance(user, data);
+        const fresh = await UserRepository.findByPk(user.id, {
+            include: [{ model: UserRepository.Role, as: "role", attributes: ["id", "name"] }],
             attributes: { exclude: ["password"] },
         });
         return fresh;
     }
 
     static async deleteUser(id) {
-        const user = await User.findByPk(parseInt(id));
+        const user = await UserRepository.findByPk(parseInt(id));
         if (!user) return false;
-        await user.destroy();
+        await UserRepository.destroyInstance(user);
         return true;
     }
 }

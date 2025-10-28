@@ -1,5 +1,5 @@
 import { Op } from "sequelize";
-import { Product } from "../models/index.js";
+import ProductRepository from "../repositories/ProductRepository.js";
 
 function buildPaging({ page = 1, limit = 10 }) {
     const p = Math.max(1, parseInt(page));
@@ -16,7 +16,7 @@ class ProductService {
         if (maxPrice != null) where.price = { ...(where.price || {}), [Op.lte]: Number(maxPrice) };
 
         const { limit: l, offset } = buildPaging({ page, limit });
-        const { count, rows } = await Product.findAndCountAll({
+        const { count, rows } = await ProductRepository.findAndCountAll({
             where,
             limit: l,
             offset,
@@ -47,7 +47,7 @@ class ProductService {
 
         const { limit: l, offset } = buildPaging({ page, limit });
 
-        const { count, rows } = await Product.findAndCountAll({
+        const { count, rows } = await ProductRepository.findAndCountAll({
             where,
             limit: l,
             offset,
@@ -102,14 +102,14 @@ class ProductService {
             weight: data.weight != null ? Number(data.weight) : null,
         };
 
-        const created = await Product.create(payload);
+        const created = await ProductRepository.create(payload);
         return created;
     }
 
     static async getProductById(id) {
         const productId = parseInt(id);
         if (Number.isNaN(productId)) return null;
-        return Product.findByPk(productId);
+        return ProductRepository.findByPk(productId);
     }
 
     static async updateProduct(id, updates) {
@@ -134,14 +134,14 @@ class ProductService {
         if (updates.profitPercent !== undefined) data.profitPercent = updates.profitPercent != null ? Number(updates.profitPercent) : null;
         if (updates.weight !== undefined) data.weight = updates.weight != null ? Number(updates.weight) : null;
 
-        await product.update(data);
+        await ProductRepository.updateInstance(product, data);
         return product;
     }
 
     static async deleteProduct(id) {
         const product = await this.getProductById(id);
         if (!product) return false;
-        await product.destroy();
+        await ProductRepository.destroyInstance(product);
         return true;
     }
 }

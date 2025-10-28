@@ -12,6 +12,9 @@ const PORT = process.env.PORT || 3000
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+// Silence favicon 404s (optional)
+app.get('/favicon.ico', (req, res) => res.status(204).end())
+
 // Serve static files from /public
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)

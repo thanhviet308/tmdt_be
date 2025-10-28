@@ -60,5 +60,21 @@
                 location.href = '/auth/login.html';
             });
         }
+
+        // Bind sidebar toggle after header injection (in case scripts.js ran before header existed)
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.body.classList.toggle('sb-sidenav-toggled');
+                try { localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled')); } catch (_) { }
+            });
+            // Restore persisted state
+            try {
+                if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
+                    document.body.classList.add('sb-sidenav-toggled');
+                }
+            } catch (_) { }
+        }
     });
 })();

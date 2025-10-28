@@ -1,5 +1,6 @@
 import ProductService from "../services/ProductService.js";
 import { successResponse, errorResponse } from "../utils/response.js";
+import { publicPathFor } from "../middlewares/upload.js";
 
 class ProductController {
     async getAllProducts(req, res) {
@@ -13,7 +14,11 @@ class ProductController {
 
     async createProduct(req, res) {
         try {
-            const created = await ProductService.createProduct(req.body || {});
+            const payload = { ...(req.body || {}) };
+            if (req.file) {
+                payload.image = publicPathFor(req.file, 'products');
+            }
+            const created = await ProductService.createProduct(payload);
             return successResponse(res, "Tạo sản phẩm thành công", created, 201);
         } catch (err) {
             const isValidation = String(err.message || "").startsWith("validation");
@@ -33,7 +38,11 @@ class ProductController {
 
     async updateProduct(req, res) {
         try {
-            const updated = await ProductService.updateProduct(req.params?.id, req.body || {});
+            const updates = { ...(req.body || {}) };
+            if (req.file) {
+                updates.image = publicPathFor(req.file, 'products');
+            }
+            const updated = await ProductService.updateProduct(req.params?.id, updates);
             if (!updated) return errorResponse(res, "Không tìm thấy sản phẩm", 404);
             return successResponse(res, "Cập nhật sản phẩm thành công", updated);
         } catch (err) {

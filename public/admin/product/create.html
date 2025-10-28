@@ -5,9 +5,9 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="Shop" />
-    <meta name="author" content="Shop" />
-    <title>Create Product - Shop</title>
+    <meta name="description" content="Y Tế Mart" />
+    <meta name="author" content="Y Tế Mart" />
+    <title>Tạo Sản phẩm - Y Tế Mart</title>
     <link href="/assets/css/styles.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -20,41 +20,62 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Products</h1>
+                    <h1 class="mt-4">Sản phẩm</h1>
                     <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item"><a href="/admin/dashboard/show.html">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="/admin/product/show.html">Product</a></li>
-                        <li class="breadcrumb-item active">Create</li>
+                        <li class="breadcrumb-item"><a href="/admin/dashboard/show.html">Trang chủ</a></li>
+                        <li class="breadcrumb-item"><a href="/admin/product/show.html">Sản phẩm</a></li>
+                        <li class="breadcrumb-item active">Tạo mới</li>
                     </ol>
                     <div class="mt-5">
                         <div class="row">
                             <div class="col-md-6 col-12 mx-auto">
-                                <h3>Create a product</h3>
+                                <h3>Tạo sản phẩm</h3>
                                 <hr />
                                 <!-- Product create form wired to API -->
                                 <form class="row" id="createProductForm">
                                     <div class="mb-3 col-12 col-md-6">
-                                        <label class="form-label">Name:</label>
+                                        <label class="form-label">Tên:</label>
                                         <input type="text" class="form-control" id="name" />
                                     </div>
                                     <div class="mb-3 col-12 col-md-6">
-                                        <label class="form-label">Price:</label>
+                                        <label class="form-label">Giá:</label>
                                         <input type="number" class="form-control" id="price" />
                                     </div>
                                     <div class="mb-3 col-12">
-                                        <label class="form-label">Detail description:</label>
+                                        <label class="form-label">Mô tả chi tiết:</label>
                                         <textarea class="form-control" id="detailDesc"></textarea>
                                     </div>
                                     <div class="mb-3 col-12 col-md-6">
-                                        <label class="form-label">Short description:</label>
+                                        <label class="form-label">Mô tả ngắn:</label>
                                         <input type="text" class="form-control" id="shortDesc" />
                                     </div>
                                     <div class="mb-3 col-12 col-md-6">
-                                        <label class="form-label">Quantity:</label>
+                                        <label class="form-label">Số lượng:</label>
                                         <input type="number" class="form-control" id="quantity" />
                                     </div>
                                     <div class="mb-3 col-12 col-md-6">
-                                        <label for="avatarFile" class="form-label">Image:</label>
+                                        <label class="form-label">Danh mục:</label>
+                                        <select class="form-select" id="factory">
+                                            <option value="Thiết bị đo y tế">Thiết bị đo y tế</option>
+                                            <option value="Thiết bị hỗ trợ hô hấp">Thiết bị hỗ trợ hô hấp</option>
+                                            <option value="Vật tư y tế">Vật tư y tế</option>
+                                            <option value="Chăm sóc sức khỏe">Chăm sóc sức khỏe</option>
+                                            <option value="Thiết bị phục hồi chức năng">Thiết bị phục hồi chức năng
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3 col-12 col-md-6">
+                                        <label class="form-label">Đối tượng sử dụng:</label>
+                                        <select class="form-select" id="target">
+                                            <option value="Gia đình">Gia đình</option>
+                                            <option value="Phòng khám">Phòng khám</option>
+                                            <option value="Bệnh viện">Bệnh viện</option>
+                                            <option value="Người cao tuổi">Người cao tuổi</option>
+                                            <option value="Mẹ & bé">Mẹ & bé</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3 col-12 col-md-6">
+                                        <label for="avatarFile" class="form-label">Ảnh:</label>
                                         <input class="form-control" type="file" id="avatarFile"
                                             accept=".png, .jpg, .jpeg" />
                                     </div>
@@ -63,7 +84,7 @@
                                             id="avatarPreview" />
                                     </div>
                                     <div class="col-12 mb-5">
-                                        <button type="button" class="btn btn-primary" id="submitBtn">Create</button>
+                                        <button type="button" class="btn btn-primary" id="submitBtn">Tạo mới</button>
                                     </div>
                                 </form>
 

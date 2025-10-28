@@ -5,9 +5,9 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="Shop" />
-    <meta name="author" content="Shop" />
-    <title>Users - Shop</title>
+    <meta name="description" content="Y Tế Mart" />
+    <meta name="author" content="Y Tế Mart" />
+    <title>Người dùng - Y Tế Mart</title>
     <link href="/assets/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
@@ -19,25 +19,25 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Manage Users</h1>
+                    <h1 class="mt-4">Quản lý Người dùng</h1>
                     <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item"><a href="/admin/dashboard/show.html">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Users</li>
+                        <li class="breadcrumb-item"><a href="/admin/dashboard/show.html">Trang chủ</a></li>
+                        <li class="breadcrumb-item active">Người dùng</li>
                     </ol>
                     <div class="mt-3 d-flex gap-2 align-items-end flex-wrap">
                         <div>
-                            <label for="searchInput" class="form-label">Search</label>
-                            <input id="searchInput" type="text" class="form-control" placeholder="email/name" />
+                            <label for="searchInput" class="form-label">Tìm kiếm</label>
+                            <input id="searchInput" type="text" class="form-control" placeholder="email/họ tên" />
                         </div>
-                        <button id="applyFilter" class="btn btn-outline-primary">Apply</button>
-                        <a href="/admin/user/create.html" class="btn btn-primary ms-auto">Create a user</a>
+                        <button id="applyFilter" class="btn btn-outline-primary">Lọc</button>
+                        <a href="/admin/user/create.html" class="btn btn-primary ms-auto">Tạo người dùng</a>
                     </div>
 
                     <div class="mt-4">
                         <div class="row">
                             <div class="col-12 mx-auto">
                                 <div class="d-flex align-items-center">
-                                    <h3 class="mb-0">Table Users</h3>
+                                    <h3 class="mb-0">Danh sách người dùng</h3>
                                     <div id="listInfo" class="ms-auto text-muted small"></div>
                                 </div>
                                 <hr />
@@ -46,14 +46,14 @@
                                         <tr>
                                             <th>ID</th>
                                             <th>Email</th>
-                                            <th>Full Name</th>
-                                            <th>Role</th>
-                                            <th>Action</th>
+                                            <th>Họ tên</th>
+                                            <th>Vai trò</th>
+                                            <th>Hành động</th>
                                         </tr>
                                     </thead>
                                     <tbody id="usersTbody"></tbody>
                                 </table>
-                                <nav aria-label="Users pagination">
+                                <nav aria-label="Phân trang người dùng">
                                     <ul id="pagination" class="pagination justify-content-center"></ul>
                                 </nav>
                             </div>
