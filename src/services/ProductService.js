@@ -1,4 +1,4 @@
-import { Op } from "sequelize";
+// Note: Query construction is delegated to the repository layer
 import ProductRepository from "../repositories/ProductRepository.js";
 
 function buildPaging({ page = 1, limit = 10 }) {
@@ -9,20 +9,8 @@ function buildPaging({ page = 1, limit = 10 }) {
 
 class ProductService {
     static async getPublicProducts({ page = 1, limit = 12, search = "", category = "", minPrice, maxPrice, sortBy = "createdAt", sortOrder = "DESC" }) {
-        const where = {};
-        if (search) where.name = { [Op.iLike]: `%${search}%` };
-        if (category) where.category = category;
-        if (minPrice != null) where.price = { ...(where.price || {}), [Op.gte]: Number(minPrice) };
-        if (maxPrice != null) where.price = { ...(where.price || {}), [Op.lte]: Number(maxPrice) };
-
-        const { limit: l, offset } = buildPaging({ page, limit });
-        const { count, rows } = await ProductRepository.findAndCountAll({
-            where,
-            limit: l,
-            offset,
-            order: [[sortBy, String(sortOrder).toUpperCase() === "ASC" ? "ASC" : "DESC"]],
-            attributes: ["id", "name", "price", "image", "category", "createdAt", "updatedAt"],
-        });
+        const { count, rows } = await ProductRepository.searchPublic({ page, limit, search, category, minPrice, maxPrice, sortBy, sortOrder });
+        const { limit: l } = buildPaging({ page, limit });
         const totalPages = Math.ceil(count / l) || 1;
         return {
             products: rows,
@@ -41,33 +29,8 @@ class ProductService {
         return this.getProductById(id);
     }
     static async getAllProducts({ page = 1, limit = 10, search = "", category = "", sortBy = "createdAt", sortOrder = "DESC" }) {
-        const where = {};
-        if (search) where.name = { [Op.iLike]: `%${search}%` };
-        if (category) where.category = category;
-
-        const { limit: l, offset } = buildPaging({ page, limit });
-
-        const { count, rows } = await ProductRepository.findAndCountAll({
-            where,
-            limit: l,
-            offset,
-            order: [[sortBy, String(sortOrder).toUpperCase() === "ASC" ? "ASC" : "DESC"]],
-            attributes: [
-                "id",
-                "name",
-                "price",
-                "image",
-                "description",
-                "category",
-                "quantity",
-                "cost",
-                "profitPercent",
-                "weight",
-                "createdAt",
-                "updatedAt",
-            ],
-        });
-
+        const { count, rows } = await ProductRepository.searchAdmin({ page, limit, search, category, sortBy, sortOrder });
+        const { limit: l } = buildPaging({ page, limit });
         const totalPages = Math.ceil(count / l) || 1;
         return {
             products: rows,

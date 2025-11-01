@@ -4,6 +4,7 @@ import adminUserRoutes from "./admin/users.js";
 import adminOrderRoutes from "./admin/orders.js";
 import authRoutes from "./auth.js";
 import publicProductRoutes from "./products.js";
+import cartRoutes from "./cart.js";
 
 const router = express.Router();
 
@@ -13,5 +14,6 @@ router.use("/admin", adminUserRoutes);
 router.use("/admin", adminOrderRoutes);
 router.use("/auth", authRoutes);
 router.use("/products", publicProductRoutes);
+router.use("/cart", cartRoutes);
 
 export default router;
