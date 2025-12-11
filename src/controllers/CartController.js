@@ -50,6 +50,18 @@ class CartController {
             return errorResponse(res, err.message || 'Lỗi khi xóa mục giỏ hàng', 400);
         }
     }
+
+    // POST /api/cart/checkout
+    async checkout(req, res) {
+        try {
+            const userId = req.user.id;
+            const checkoutData = req.body || {};
+            const order = await CartService.checkout(userId, checkoutData);
+            return successResponse(res, 'Đặt hàng thành công', order);
+        } catch (err) {
+            return errorResponse(res, err.message || 'Lỗi khi đặt hàng', 400);
+        }
+    }
 }
 
 export default new CartController();

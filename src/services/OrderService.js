@@ -42,6 +42,10 @@ class OrderService {
                 "shippingAddress",
                 "recipientPhone",
                 "recipientName",
+                "paymentMethod",
+                "paymentStatus",
+                "deliveryMethod",
+                "notes",
                 "createdAt",
                 "updatedAt",
             ],
@@ -79,9 +83,38 @@ class OrderService {
         if (!ALLOWED_STATUSES.includes(next)) {
             throw new Error("validation: invalid status (PENDING, SHIPPING, COMPLETE, CANCEL)");
         }
-        const order = await Order.findByPk(parseInt(id));
+        
+        const orderId = parseInt(id);
+        const order = await Order.findByPk(orderId, {
+            include: [{ model: OrderDetail, as: "orderDetails" }],
+        });
         if (!order) return null;
-        await order.update({ status: next });
+
+        const previousStatus = String(order.status).toUpperCase();
+
+        // Nếu đơn hàng đang chuyển sang trạng thái CANCEL và trước đó chưa bị cancel
+        // thì hoàn lại số lượng vào kho
+        if (next === "CANCEL" && previousStatus !== "CANCEL") {
+            await sequelize.transaction(async (t) => {
+                // Hoàn kho cho từng sản phẩm trong đơn hàng
+                for (const detail of order.orderDetails) {
+                    const product = await Product.findByPk(detail.productId, { transaction: t });
+                    if (product) {
+                        const newQuantity = product.quantity + detail.quantity;
+                        await product.update({
+                            quantity: newQuantity,
+                            status: newQuantity > 0 ? "active" : product.status,
+                        }, { transaction: t });
+                    }
+                }
+                
+                // Cập nhật trạng thái đơn hàng
+                await order.update({ status: next }, { transaction: t });
+            });
+        } else {
+            await order.update({ status: next });
+        }
+
         return this.getOrderById(order.id);
     }
 

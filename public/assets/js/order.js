@@ -11,6 +11,25 @@
             default: return s || '';
         }
     }
+    function vnPaymentMethod(m) {
+        switch ((m || '').toLowerCase()) {
+            case 'cod': return 'Thanh toán khi nhận hàng';
+            case 'bank_transfer': return 'Chuyển khoản ngân hàng';
+            case 'credit_card': return 'Thẻ tín dụng';
+            case 'momo': return 'Ví MoMo';
+            case 'zalopay': return 'ZaloPay';
+            default: return m || 'Chưa xác định';
+        }
+    }
+    function vnPaymentStatus(s) {
+        switch ((s || '').toLowerCase()) {
+            case 'pending': return 'Chờ thanh toán';
+            case 'paid': return 'Đã thanh toán';
+            case 'failed': return 'Thanh toán thất bại';
+            case 'refunded': return 'Đã hoàn tiền';
+            default: return s || 'Chưa xác định';
+        }
+    }
 
     // ========== /admin/order/show.html ==========
     function orderList_getQueryParams() {
@@ -87,9 +106,22 @@
         if (title) title.textContent = `Chi tiết đơn hàng (id = ${order.id})`;
         if (summary) summary.innerHTML = `
       <div class="alert alert-info">
-        <div><strong>Trạng thái:</strong> ${vnStatus(order.status)}</div>
-        <div><strong>Người đặt:</strong> ${order.user?.fullName || order.user?.email || 'Không có'}</div>
-                <div><strong>Tổng:</strong> ${toMoney(order.totalPrice)}</div>
+        <div class="row">
+          <div class="col-md-6">
+            <div><strong>Trạng thái đơn hàng:</strong> ${vnStatus(order.status)}</div>
+            <div><strong>Người đặt:</strong> ${order.user?.fullName || order.user?.email || 'Không có'}</div>
+            <div><strong>Tổng tiền:</strong> ${toMoney(order.totalPrice)}</div>
+            <div><strong>Địa chỉ giao hàng:</strong> ${order.shippingAddress || 'Chưa có'}</div>
+          </div>
+          <div class="col-md-6">
+            <div><strong>Người nhận:</strong> ${order.recipientName || 'Chưa có'}</div>
+            <div><strong>SĐT người nhận:</strong> ${order.recipientPhone || 'Chưa có'}</div>
+            <div><strong>Phương thức thanh toán:</strong> ${vnPaymentMethod(order.paymentMethod)}</div>
+            <div><strong>Trạng thái thanh toán:</strong> ${vnPaymentStatus(order.paymentStatus)}</div>
+            <div><strong>Phương thức vận chuyển:</strong> ${order.deliveryMethod || 'Chưa xác định'}</div>
+            ${order.notes ? `<div><strong>Ghi chú:</strong> ${order.notes}</div>` : ''}
+          </div>
+        </div>
       </div>`;
         const rows = (order.orderDetails || []).map(od => {
             const p = od.product || {};

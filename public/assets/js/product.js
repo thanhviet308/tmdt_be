@@ -13,6 +13,28 @@
             default: return c || '';
         }
     }
+    function vnMedicalDeviceType(t) {
+        const key = String(t || '').toLowerCase();
+        switch (key) {
+            case 'blood-pressure-monitor': return 'Máy đo huyết áp';
+            case 'blood-glucose-meter': return 'Máy đo đường huyết';
+            case 'thermometer': return 'Nhiệt kế';
+            case 'pulse-oximeter': return 'Máy đo SpO2';
+            case 'nebulizer': return 'Máy xông khí dung';
+            case 'wheelchair': return 'Xe lăn';
+            case 'other': return 'Khác';
+            default: return t || '';
+        }
+    }
+    function vnStatus(s) {
+        const key = String(s || '').toLowerCase();
+        switch (key) {
+            case 'active': return 'Đang bán';
+            case 'inactive': return 'Ngừng bán';
+            case 'out_of_stock': return 'Hết hàng';
+            default: return s || '';
+        }
+    }
 
     // ========== /admin/product/show.html ==========
     function prodList_getQueryParams() { const p = new URLSearchParams(location.search); return { page: parseInt(p.get('page') || '1') }; }
@@ -77,9 +99,18 @@
         if (info) info.innerHTML = `
             <li class="list-group-item"><strong>ID:</strong> ${p.id}</li>
             <li class="list-group-item"><strong>Tên:</strong> ${p.name || ''}</li>
-            <li class="list-group-item"><strong>Giá:</strong> ${money(p.price)}</li>
+            <li class="list-group-item"><strong>Giá:</strong> ${money(p.price)} đ</li>
             <li class="list-group-item"><strong>Danh mục:</strong> ${vnCategory(p.category)}</li>
             <li class="list-group-item"><strong>Số lượng:</strong> ${p.quantity ?? ''}</li>
+            <li class="list-group-item"><strong>Loại thiết bị:</strong> ${vnMedicalDeviceType(p.medicalDeviceType)}</li>
+            <li class="list-group-item"><strong>Thương hiệu:</strong> ${p.brand || 'Chưa có'}</li>
+            <li class="list-group-item"><strong>Model:</strong> ${p.modelNumber || 'Chưa có'}</li>
+            <li class="list-group-item"><strong>Bảo hành:</strong> ${p.warrantyPeriod ? p.warrantyPeriod + ' tháng' : 'Chưa có'}</li>
+            <li class="list-group-item"><strong>Chứng nhận:</strong> ${p.certification || 'Chưa có'}</li>
+            <li class="list-group-item"><strong>Trạng thái:</strong> ${vnStatus(p.status)}</li>
+            <li class="list-group-item"><strong>Thông số kỹ thuật:</strong> ${p.specifications || 'Chưa có'}</li>
+            <li class="list-group-item"><strong>Hướng dẫn sử dụng:</strong> ${p.usageInstructions || 'Chưa có'}</li>
+            <li class="list-group-item"><strong>Mô tả:</strong> ${p.description || 'Chưa có'}</li>
         `;
     }
 
@@ -101,6 +132,16 @@
         const detailDesc = document.getElementById('detailDesc').value.trim();
         const shortDesc = document.getElementById('shortDesc').value.trim();
         const category = document.getElementById('factory')?.value || '';
+        // Thông tin thiết bị y tế
+        const medicalDeviceType = document.getElementById('medicalDeviceType')?.value || '';
+        const brand = document.getElementById('brand')?.value?.trim() || '';
+        const modelNumber = document.getElementById('modelNumber')?.value?.trim() || '';
+        const warrantyPeriod = document.getElementById('warrantyPeriod')?.value || '';
+        const certification = document.getElementById('certification')?.value?.trim() || '';
+        const status = document.getElementById('status')?.value || 'active';
+        const specifications = document.getElementById('specifications')?.value?.trim() || '';
+        const usageInstructions = document.getElementById('usageInstructions')?.value?.trim() || '';
+
         if (!name) { alert('Vui lòng nhập tên sản phẩm'); return; }
         if (!price || price <= 0) { alert('Giá sản phẩm phải > 0'); return; }
         const token = localStorage.getItem('token');
@@ -110,6 +151,16 @@
         fd.append('quantity', String(quantity));
         if (detailDesc || shortDesc) fd.append('description', detailDesc || shortDesc);
         if (category) fd.append('category', category);
+        // Thêm thông tin thiết bị y tế
+        if (medicalDeviceType) fd.append('medicalDeviceType', medicalDeviceType);
+        if (brand) fd.append('brand', brand);
+        if (modelNumber) fd.append('modelNumber', modelNumber);
+        if (warrantyPeriod) fd.append('warrantyPeriod', warrantyPeriod);
+        if (certification) fd.append('certification', certification);
+        if (status) fd.append('status', status);
+        if (specifications) fd.append('specifications', specifications);
+        if (usageInstructions) fd.append('usageInstructions', usageInstructions);
+
         const file = document.getElementById('avatarFile')?.files?.[0];
         if (file) fd.append('image', file);
         const btn = document.getElementById('submitBtn'); btn.disabled = true;
@@ -160,6 +211,24 @@
             const code = mapToCode(p.category);
             factory.value = code;
         }
+        // Load thông tin thiết bị y tế
+        const medicalDeviceType = document.getElementById('medicalDeviceType');
+        if (medicalDeviceType && p.medicalDeviceType) medicalDeviceType.value = p.medicalDeviceType;
+        const brand = document.getElementById('brand');
+        if (brand) brand.value = p.brand || '';
+        const modelNumber = document.getElementById('modelNumber');
+        if (modelNumber) modelNumber.value = p.modelNumber || '';
+        const warrantyPeriod = document.getElementById('warrantyPeriod');
+        if (warrantyPeriod) warrantyPeriod.value = p.warrantyPeriod || '';
+        const certification = document.getElementById('certification');
+        if (certification) certification.value = p.certification || '';
+        const statusEl = document.getElementById('status');
+        if (statusEl && p.status) statusEl.value = p.status;
+        const specifications = document.getElementById('specifications');
+        if (specifications) specifications.value = p.specifications || '';
+        const usageInstructions = document.getElementById('usageInstructions');
+        if (usageInstructions) usageInstructions.value = p.usageInstructions || '';
+
         const pre = document.getElementById('avatarPreview'); if (p.image && pre) { const url = p.image.startsWith('/') ? p.image : '/' + p.image; pre.src = url; pre.style.display = 'block'; }
     }
     async function prodUpdate_submit() {
@@ -169,6 +238,16 @@
         const quantity = document.getElementById('quantity').value ? parseInt(document.getElementById('quantity').value) : 0;
         const description = document.getElementById('detailDesc').value.trim() || document.getElementById('shortDesc').value.trim();
         const category = document.getElementById('factory')?.value || null;
+        // Thông tin thiết bị y tế
+        const medicalDeviceType = document.getElementById('medicalDeviceType')?.value || '';
+        const brand = document.getElementById('brand')?.value?.trim() || '';
+        const modelNumber = document.getElementById('modelNumber')?.value?.trim() || '';
+        const warrantyPeriod = document.getElementById('warrantyPeriod')?.value || '';
+        const certification = document.getElementById('certification')?.value?.trim() || '';
+        const status = document.getElementById('status')?.value || 'active';
+        const specifications = document.getElementById('specifications')?.value?.trim() || '';
+        const usageInstructions = document.getElementById('usageInstructions')?.value?.trim() || '';
+
         if (!name) { alert('Vui lòng nhập tên sản phẩm'); return; }
         if (!price || price <= 0) { alert('Giá sản phẩm phải > 0'); return; }
         const fd = new FormData();
@@ -177,6 +256,16 @@
         fd.append('quantity', String(quantity));
         if (description) fd.append('description', description);
         if (category) fd.append('category', category);
+        // Thêm thông tin thiết bị y tế
+        fd.append('medicalDeviceType', medicalDeviceType);
+        fd.append('brand', brand);
+        fd.append('modelNumber', modelNumber);
+        fd.append('warrantyPeriod', warrantyPeriod);
+        fd.append('certification', certification);
+        fd.append('status', status);
+        fd.append('specifications', specifications);
+        fd.append('usageInstructions', usageInstructions);
+
         const file = document.getElementById('avatarFile')?.files?.[0];
         if (file) fd.append('image', file);
         const btn = document.getElementById('updateBtn'); btn.disabled = true;

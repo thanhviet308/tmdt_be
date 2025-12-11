@@ -19,4 +19,7 @@ router.patch("/items/:id", (req, res) => CartController.updateItem(req, res));
 // DELETE /api/cart/items/:id
 router.delete("/items/:id", (req, res) => CartController.removeItem(req, res));
 
+// POST /api/cart/checkout - Đặt hàng (trừ kho)
+router.post("/checkout", (req, res) => CartController.checkout(req, res));
+
 export default router;

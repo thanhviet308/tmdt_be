@@ -65,14 +65,48 @@
                                         </select>
                                     </div>
                                     <div class="mb-3 col-12 col-md-6">
-                                        <label class="form-label">Đối tượng sử dụng:</label>
-                                        <select class="form-select" id="target">
-                                            <option value="Gia đình">Gia đình</option>
-                                            <option value="Phòng khám">Phòng khám</option>
-                                            <option value="Bệnh viện">Bệnh viện</option>
-                                            <option value="Người cao tuổi">Người cao tuổi</option>
-                                            <option value="Mẹ & bé">Mẹ & bé</option>
+                                        <label class="form-label">Loại thiết bị y tế:</label>
+                                        <select class="form-select" id="medicalDeviceType">
+                                            <option value="blood-pressure-monitor">Máy đo huyết áp</option>
+                                            <option value="blood-glucose-meter">Máy đo đường huyết</option>
+                                            <option value="thermometer">Nhiệt kế</option>
+                                            <option value="pulse-oximeter">Máy đo SpO2</option>
+                                            <option value="nebulizer">Máy xông khí dung</option>
+                                            <option value="wheelchair">Xe lăn</option>
+                                            <option value="other">Khác</option>
                                         </select>
+                                    </div>
+                                    <div class="mb-3 col-12 col-md-6">
+                                        <label class="form-label">Thương hiệu:</label>
+                                        <input type="text" class="form-control" id="brand" placeholder="VD: Omron, Beurer..." />
+                                    </div>
+                                    <div class="mb-3 col-12 col-md-6">
+                                        <label class="form-label">Mã sản phẩm/Model:</label>
+                                        <input type="text" class="form-control" id="modelNumber" placeholder="VD: HEM-7120" />
+                                    </div>
+                                    <div class="mb-3 col-12 col-md-6">
+                                        <label class="form-label">Thời gian bảo hành (tháng):</label>
+                                        <input type="number" class="form-control" id="warrantyPeriod" value="12" />
+                                    </div>
+                                    <div class="mb-3 col-12 col-md-6">
+                                        <label class="form-label">Chứng nhận/Giấy phép:</label>
+                                        <input type="text" class="form-control" id="certification" placeholder="VD: FDA, CE, Bộ Y tế..." />
+                                    </div>
+                                    <div class="mb-3 col-12 col-md-6">
+                                        <label class="form-label">Trạng thái:</label>
+                                        <select class="form-select" id="status">
+                                            <option value="active">Đang bán</option>
+                                            <option value="inactive">Ngừng bán</option>
+                                            <option value="out_of_stock">Hết hàng</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3 col-12">
+                                        <label class="form-label">Thông số kỹ thuật:</label>
+                                        <textarea class="form-control" id="specifications" rows="3" placeholder="VD: Độ chính xác: ±3mmHg, Phạm vi đo: 0-299 mmHg..."></textarea>
+                                    </div>
+                                    <div class="mb-3 col-12">
+                                        <label class="form-label">Hướng dẫn sử dụng:</label>
+                                        <textarea class="form-control" id="usageInstructions" rows="3" placeholder="Nhập hướng dẫn sử dụng sản phẩm..."></textarea>
                                     </div>
                                     <div class="mb-3 col-12 col-md-6">
                                         <label for="avatarFile" class="form-label">Ảnh:</label>

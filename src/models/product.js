@@ -44,6 +44,48 @@ export default function ProductModel(sequelize, DataTypes) {
                 type: DataTypes.DECIMAL(8, 3),
                 allowNull: true,
             },
+            // Thông tin cho thiết bị y tế
+            brand: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                comment: "Thương hiệu/nhà sản xuất",
+            },
+            modelNumber: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                comment: "Mã sản phẩm/model",
+            },
+            warrantyPeriod: {
+                type: DataTypes.INTEGER,
+                allowNull: true,
+                comment: "Thời gian bảo hành (tháng)",
+            },
+            certification: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                comment: "Chứng nhận/giấy phép lưu hành",
+            },
+            specifications: {
+                type: DataTypes.TEXT,
+                allowNull: true,
+                comment: "Thông số kỹ thuật (JSON hoặc text)",
+            },
+            usageInstructions: {
+                type: DataTypes.TEXT,
+                allowNull: true,
+                comment: "Hướng dẫn sử dụng",
+            },
+            medicalDeviceType: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                comment: "Loại thiết bị y tế (máy đo huyết áp, máy đo đường huyết, etc.)",
+            },
+            status: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                defaultValue: "active",
+                comment: "Trạng thái sản phẩm (active, inactive, out_of_stock)",
+            },
         },
         {
             tableName: "products",

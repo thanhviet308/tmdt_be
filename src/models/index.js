@@ -9,6 +9,8 @@ import CartModel from "./cart.js";
 import CartDetailModel from "./cart_detail.js";
 import OrderModel from "./order.js";
 import OrderDetailModel from "./order_detail.js";
+import ReviewModel from "./review.js";
+import CouponModel from "./coupon.js";
 
 // Initialize models
 const Role = RoleModel(sequelize, DataTypes);
@@ -18,6 +20,8 @@ const Cart = CartModel(sequelize, DataTypes);
 const CartDetail = CartDetailModel(sequelize, DataTypes);
 const Order = OrderModel(sequelize, DataTypes);
 const OrderDetail = OrderDetailModel(sequelize, DataTypes);
+const Review = ReviewModel(sequelize, DataTypes);
+const Coupon = CouponModel(sequelize, DataTypes);
 
 // Define associations
 // Role - User (1:N)
@@ -48,6 +52,18 @@ OrderDetail.belongsTo(Order, { foreignKey: "orderId", as: "order" });
 Product.hasMany(OrderDetail, { foreignKey: "productId", as: "orderDetails" });
 OrderDetail.belongsTo(Product, { foreignKey: "productId", as: "product" });
 
+// User - Review (1:N)
+User.hasMany(Review, { foreignKey: "userId", as: "reviews" });
+Review.belongsTo(User, { foreignKey: "userId", as: "user" });
+
+// Product - Review (1:N)
+Product.hasMany(Review, { foreignKey: "productId", as: "reviews" });
+Review.belongsTo(Product, { foreignKey: "productId", as: "product" });
+
+// Coupon - Order (1:N)
+Coupon.hasMany(Order, { foreignKey: "couponId", as: "orders" });
+Order.belongsTo(Coupon, { foreignKey: "couponId", as: "coupon" });
+
 // Export models and sequelize instance
 export {
     sequelize,
@@ -58,6 +74,8 @@ export {
     CartDetail,
     Order,
     OrderDetail,
+    Review,
+    Coupon,
 };
 
 export default {
@@ -69,4 +87,6 @@ export default {
     CartDetail,
     Order,
     OrderDetail,
+    Review,
+    Coupon,
 };

@@ -63,6 +63,15 @@ class ProductService {
             cost: data.cost != null ? Number(data.cost) : null,
             profitPercent: data.profitPercent != null ? Number(data.profitPercent) : null,
             weight: data.weight != null ? Number(data.weight) : null,
+            // Thông tin thiết bị y tế
+            brand: data.brand || null,
+            modelNumber: data.modelNumber || null,
+            warrantyPeriod: data.warrantyPeriod != null ? parseInt(data.warrantyPeriod) : null,
+            certification: data.certification || null,
+            specifications: data.specifications || null,
+            usageInstructions: data.usageInstructions || null,
+            medicalDeviceType: data.medicalDeviceType || null,
+            status: data.status || "active",
         };
 
         const created = await ProductRepository.create(payload);
@@ -96,6 +105,15 @@ class ProductService {
         if (updates.cost !== undefined) data.cost = updates.cost != null ? Number(updates.cost) : null;
         if (updates.profitPercent !== undefined) data.profitPercent = updates.profitPercent != null ? Number(updates.profitPercent) : null;
         if (updates.weight !== undefined) data.weight = updates.weight != null ? Number(updates.weight) : null;
+        // Thông tin thiết bị y tế
+        if (updates.brand !== undefined) data.brand = updates.brand;
+        if (updates.modelNumber !== undefined) data.modelNumber = updates.modelNumber;
+        if (updates.warrantyPeriod !== undefined) data.warrantyPeriod = updates.warrantyPeriod != null ? parseInt(updates.warrantyPeriod) : null;
+        if (updates.certification !== undefined) data.certification = updates.certification;
+        if (updates.specifications !== undefined) data.specifications = updates.specifications;
+        if (updates.usageInstructions !== undefined) data.usageInstructions = updates.usageInstructions;
+        if (updates.medicalDeviceType !== undefined) data.medicalDeviceType = updates.medicalDeviceType;
+        if (updates.status !== undefined) data.status = updates.status;
 
         await ProductRepository.updateInstance(product, data);
         return product;

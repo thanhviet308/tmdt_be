@@ -62,7 +62,7 @@ const ProductRepository = {
             limit: l,
             offset: (p - 1) * l,
             order: [[sortBy, String(sortOrder).toUpperCase() === "ASC" ? "ASC" : "DESC"]],
-            attributes: ["id", "name", "price", "image", "category", "createdAt", "updatedAt"],
+            attributes: ["id", "name", "price", "image", "category", "brand", "medicalDeviceType", "status", "createdAt", "updatedAt"],
         });
         return result;
     },
@@ -118,6 +118,14 @@ const ProductRepository = {
                 "cost",
                 "profitPercent",
                 "weight",
+                "brand",
+                "modelNumber",
+                "warrantyPeriod",
+                "certification",
+                "specifications",
+                "usageInstructions",
+                "medicalDeviceType",
+                "status",
                 "createdAt",
                 "updatedAt",
             ],
