@@ -1,12 +1,12 @@
 import { Router } from "express";
 import AnalyticsController from "../../controllers/AnalyticsController.js";
 import { authenticateToken } from "../../middlewares/auth.js";
-import { authorizeRoles } from "../../middlewares/authorization.js";
+import { requireAdmin } from "../../middlewares/authorization.js";
 
 const router = Router();
 
 // Tất cả routes yêu cầu admin
-router.use(authenticateToken, authorizeRoles("admin"));
+router.use(authenticateToken, requireAdmin);
 
 router.get("/overview", AnalyticsController.getOverview);
 router.get("/revenue-by-month", AnalyticsController.getRevenueByMonth);
