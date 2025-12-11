@@ -50,9 +50,18 @@ export const uploadUserAvatar = multer({
     limits: { fileSize: DEFAULT_LIMIT },
 });
 
+export const uploadBannerImage = multer({
+    storage: buildStorage('banners'),
+    fileFilter: fileFilterImageOnly,
+    limits: { fileSize: DEFAULT_LIMIT },
+});
+
 // Helper: get the public URL/path stored in DB (relative to /public)
 export function publicPathFor(file, subfolder) {
     if (!file) return null;
     // Store path relative to static root, e.g., "uploads/products/abc.jpg"
     return path.posix.join('uploads', subfolder, file.filename);
 }
+
+// Default export for backward compatibility
+export default uploadProductImage;

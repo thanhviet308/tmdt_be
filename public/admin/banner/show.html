@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Quản lý Banner - Y Tế Mart</title>
+    <link href="/assets/css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <style>
+        .banner-img { max-width: 150px; max-height: 80px; object-fit: cover; border-radius: 4px; }
+        .badge-active { background-color: #198754; }
+        .badge-inactive { background-color: #dc3545; }
+    </style>
+</head>
+<body class="sb-nav-fixed">
+    <div id="header"></div>
+    <div id="layoutSidenav">
+        <div id="sidebar"></div>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">Quản lý Banner</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item"><a href="/admin/dashboard/show.html">Trang chủ</a></li>
+                        <li class="breadcrumb-item active">Banner</li>
+                    </ol>
+                    <div class="mb-3">
+                        <a href="/admin/banner/create.html" class="btn btn-primary">
+                            <i class="fas fa-plus me-1"></i> Thêm Banner
+                        </a>
+                    </div>
+                    <div class="card mb-4">
+                        <div class="card-header"><i class="fas fa-images me-1"></i> Danh sách Banner</div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="bannerTable">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Hình ảnh</th>
+                                            <th>Tiêu đề</th>
+                                            <th>Loại</th>
+                                            <th>Vị trí</th>
+                                            <th>Trạng thái</th>
+                                            <th>Thao tác</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="bannerTableBody">
+                                        <tr><td colspan="7" class="text-center">Đang tải...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <nav><ul class="pagination" id="pagination"></ul></nav>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <div id="footer"></div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="/assets/js/scripts.js"></script>
+    <script src="/assets/js/admin-layout.js"></script>
+    <script src="/assets/js/banner.js"></script>
+</body>
+</html>
+

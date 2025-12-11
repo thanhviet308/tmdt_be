@@ -11,6 +11,7 @@ import OrderModel from "./order.js";
 import OrderDetailModel from "./order_detail.js";
 import ReviewModel from "./review.js";
 import CouponModel from "./coupon.js";
+import BannerModel from "./banner.js";
 
 // Initialize models
 const Role = RoleModel(sequelize, DataTypes);
@@ -22,6 +23,7 @@ const Order = OrderModel(sequelize, DataTypes);
 const OrderDetail = OrderDetailModel(sequelize, DataTypes);
 const Review = ReviewModel(sequelize, DataTypes);
 const Coupon = CouponModel(sequelize, DataTypes);
+const Banner = BannerModel(sequelize, DataTypes);
 
 // Define associations
 // Role - User (1:N)
@@ -76,6 +78,7 @@ export {
     OrderDetail,
     Review,
     Coupon,
+    Banner,
 };
 
 export default {
@@ -89,4 +92,5 @@ export default {
     OrderDetail,
     Review,
     Coupon,
+    Banner,
 };
